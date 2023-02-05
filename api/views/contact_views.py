@@ -1,7 +1,7 @@
 from rest_framework import views
 from rest_framework.permissions import (AllowAny, IsAuthenticated)
 from rest_framework.response import Response
-from serializers import (ContactSerializer,)
+from api.serializers import (ContactSerializer,)
 
 
 class ContactView(views.APIView):

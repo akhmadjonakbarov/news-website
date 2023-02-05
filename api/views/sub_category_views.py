@@ -3,48 +3,48 @@ from rest_framework import views
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-from api.serializers import CategorySerializer
-from postapp.models import Category
+from api.serializers import SubCategorySerializer
+from postapp.models import SubCategory
 
 
-class CategoryListView(views.APIView):
+class SubCategoryListView(views.APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request):
-        categories = Category.objects.all()
-        serializer = CategorySerializer(categories, many=True)
+        categories = SubCategory.objects.all()
+        serializer = SubCategorySerializer(categories, many=True)
         return Response(serializer.data)
 
 
-class CategoryAddView(views.APIView):
+class SubCategoryAddView(views.APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
         data = request.data
-        serializer = CategorySerializer(data=data)
+        serializer = SubCategorySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"data": serializer.data, "message": "Yangi category qo'shildi"})
+            return Response({"data": serializer.data, "message": "Yangi SubCategory qo'shildi"})
         return Response(serializer.errors)
 
 
-class CategoryEditView(views.APIView):
+class SubCategoryEditView(views.APIView):
     permission_classes = (AllowAny,)
 
     def patch(self, request, id):
         data = request.data
-        category = Category.objects.get(id=id)
-        serializer = CategorySerializer(category, data=data, partial=True)
+        SubCategory = SubCategory.objects.get(id=id)
+        serializer = SubCategorySerializer(SubCategory, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.data)
 
 
-class CategoryDeleteView(views.APIView):
+class SubCategoryDeleteView(views.APIView):
     permission_classes = (AllowAny,)
 
     def delete(self, request, id):
-        category = Category.objects.get(id=id)
-        category.delete()
+        SubCategory = SubCategory.objects.get(id=id)
+        SubCategory.delete()
         return Response()
