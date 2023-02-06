@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "News-Website",
+            "database": "${workspaceFolder:news-website}/db.sqlite3"
+        }
+    ]
+}
