@@ -8,7 +8,7 @@ class RoutesView(views.APIView):
     permission_classes = (AllowAny, )
 
     def get(self, request):
-        isGlobal = False
+        isGlobal = True
         domain = ''
         g_domain = 'https://news-website-production.up.railway.app/'
         l_domain = 'http://127.0.0.1:8000/'
