@@ -2,7 +2,7 @@ from rest_framework import serializers
 from newapp.models import (Category, SubCategory, New, NewImages, Comment)
 from sliderapp.models import Slider
 from contactapp.models import Contact
-
+from accountapp.models import Account
 
 class CategorySerializer(serializers.ModelSerializer):
     sub_categories = serializers.SerializerMethodField(read_only=True)
@@ -70,3 +70,18 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
+
+
+class AccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = (
+            'id', 'username',
+            'first_name', 'last_name',
+        )
+
+
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password= serializers.CharField()

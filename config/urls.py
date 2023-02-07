@@ -4,7 +4,8 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 
 urlpatterns = [
-    path('dashboard/', admin.site.urls),
+    path('admin/', admin.site.urls),
+    path('dashboard/', include('api.urls.account_urls')),
     path('api/', include('api.url')),
     path('api/categories/', include('api.urls.category_urls')),
     path('api/sub-categories/', include('api.urls.sub_category_urls')),

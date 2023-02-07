@@ -1,5 +1,7 @@
 from os.path import join as joinpath
 from pathlib import Path
+from rest_framework.settings import api_settings
+from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,6 +29,7 @@ INSTALLED_APPS = [
     'contactapp.apps.ContactappConfig',
     'sliderapp.apps.SliderappConfig',
     # installed apps
+    'corsheaders.apps.CorsHeadersAppConfig',
     'rest_framework',
     'knox',
     'ckeditor',
@@ -45,8 +48,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-AUTH_USER_MODEL = 'accountapp.Account'
 
+AUTH_USER_MODEL = 'accountapp.Account'
 
 
 ROOT_URLCONF = 'config.urls'
@@ -60,17 +63,37 @@ REST_FRAMEWORK = {
     ),
 }
 
+REST_KNOX = {
+    'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
+    # By default, it is set to 64 characters (this shouldn't need changing).
+    'AUTH_TOKEN_CHARACTER_LENGTH': 64,
+    # The default is 10 hours i.e., timedelta(hours=10)).
+    'TOKEN_TTL': timedelta(minutes=45),
+    'USER_SERIALIZER': 'api.serializers.AccountSerializer',
+    # By default, this option is disabled and set to None -- thus no limit.
+    'TOKEN_LIMIT_PER_USER': None,
+    # This defines if the token expiry time is extended by TOKEN_TTL each time the token is used.
+    'AUTO_REFRESH': False,
+    'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
+}
+
+CSRF_TRUSTED_ORIGINS = ['https://news-website-production.up.railway.app']
+
+
 CKEDITOR_CONFIGS = {
     'default': {
         'skin': 'moono',
-        # 'skin': 'office2013',
+        'skin': 'office2013',
         'toolbar_Basic': [
             ['Source', '-', 'Bold', 'Italic']
         ],
         'toolbar_YourCustomToolbarConfig': [
-            {'name': 'document', 'items': ['Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']},
-            {'name': 'clipboard', 'items': ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
-            {'name': 'editing', 'items': ['Find', 'Replace', '-', 'SelectAll']},
+            {'name': 'document', 'items': [
+                'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates']},
+            {'name': 'clipboard', 'items': [
+                'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
+            {'name': 'editing', 'items': [
+                'Find', 'Replace', '-', 'SelectAll']},
             {'name': 'forms',
              'items': ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton',
                        'HiddenField']},
@@ -85,20 +108,21 @@ CKEDITOR_CONFIGS = {
             {'name': 'insert',
              'items': ['Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe']},
             '/',
-            {'name': 'styles', 'items': ['Styles', 'Format', 'Font', 'FontSize']},
+            {'name': 'styles', 'items': [
+                'Styles', 'Format', 'Font', 'FontSize']},
             {'name': 'colors', 'items': ['TextColor', 'BGColor']},
             {'name': 'tools', 'items': ['Maximize', 'ShowBlocks']},
             {'name': 'about', 'items': ['About']},
-            '/',  # put this to force next toolbar on new line
+            '/',
             {'name': 'yourcustomtools', 'items': [
-                # put the name of your editor.ui.addButton here
+
                 'Preview',
                 'Maximize',
 
             ]},
         ],
-        'toolbar': 'YourCustomToolbarConfig',  # put selected toolbar config here
-        'toolbarGroups': [{ 'name': 'document', 'groups': [ 'mode', 'document', 'doctools' ] }],
+        'toolbar': 'YourCustomToolbarConfig',
+        'toolbarGroups': [{'name': 'document', 'groups': ['mode', 'document', 'doctools']}],
         'height': 291,
         'width': '100%',
         'filebrowserWindowHeight': 725,
@@ -107,8 +131,7 @@ CKEDITOR_CONFIGS = {
         'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
         'tabSpaces': 4,
         'extraPlugins': ','.join([
-            'uploadimage', # the upload image feature
-            # your extra plugins here
+            'uploadimage',
             'dialog',
             'devtools',
             'div',
@@ -116,7 +139,6 @@ CKEDITOR_CONFIGS = {
             'autoembed',
             'embedsemantic',
             'autogrow',
-       
             'widget',
             'lineutils',
             'clipboard',
@@ -188,7 +210,6 @@ MEDIA_URL = ''
 MEDIA_ROOT = joinpath(BASE_DIR, 'static/images')
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-# STATIC_ROOT = joinpath(BASE_DIR, 'staticfiles')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
@@ -199,11 +220,8 @@ STATIC_DIR = joinpath(BASE_DIR, 'static')
 CKEDITOR_UPLOAD_PATH = "ckeditor-uploads/"
 
 
-
 if DEBUG:
-    STATICFILES_DIRS = [
-        joinpath(BASE_DIR, 'static')
-    ]
+    STATIC_ROOT = joinpath(BASE_DIR, 'staticfiles')
 else:
     STATIC_ROOT = joinpath(BASE_DIR, 'static')
 

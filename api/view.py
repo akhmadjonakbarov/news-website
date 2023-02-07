@@ -18,7 +18,7 @@ class RoutesView(views.APIView):
             domain = l_domain
 
         routes = [
-            {'DASHBOARD':f'{domain}/dashboard/'},
+            {'DASHBOARD':f'{domain}dashboard/'},
             {'GET': f'{domain}api/'},
             {'GET': f'{domain}api/categories/'},
             {'POST': f'{domain}api/categories/add/'},

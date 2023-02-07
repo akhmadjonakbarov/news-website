@@ -4,7 +4,6 @@ import uuid
 
 
 class Contact(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True)
     first_name = models.CharField(max_length=250)
     last_name = models.CharField(max_length=250)
     email = models.EmailField()
