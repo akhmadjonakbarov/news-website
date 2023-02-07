@@ -7,48 +7,50 @@ from api.serializers import SliderSerializer
 from sliderapp.models import Slider
 
 
-class SliderListView(views.APIView):
+class SliderView(generics.GenericAPIView):
+    serializer_class = SliderSerializer
     permission_classes = (AllowAny,)
+
+
+class SliderListView(SliderView):
 
     def get(self, request):
         sliders = Slider.objects.all()
-        serializer = SliderSerializer(sliders, many=True)
+        serializer = self.get_serializer(sliders, many=True)
         return Response(serializer.data)
 
 
-class SliderAddView(views.APIView):
-    permission_classes = (AllowAny,)
+class SliderAddView(SliderView):
 
     def post(self, request):
         data = request.data
-        serializer = SliderSerializer(data=data)
+        serializer = self.get_serializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response({"data": serializer.data, "message": "Yangi slider qo'shildi"})
         return Response(serializer.errors)
 
 
-class SliderDetailView(views.APIView):
+class SliderDetailView(SliderView):
     def get(self, request, id):
-        slider= Slider.objects.get(id=id)
-        serializer = SliderSerializer(slider, many=True)
+        slider = Slider.objects.get(id=id)
+        serializer = self.get_serializer(slider, many=True)
         return Response(serializer.data)
 
-class SliderEditView(views.APIView):
-    permission_classes = (AllowAny,)
+
+class SliderEditView(SliderView):
 
     def patch(self, request, id):
         data = request.data
         slider = Slider.objects.get(id=id)
-        serializer = SliderSerializer(slider, data=data, partial=True)
+        serializer = self.get_serializer(slider, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.data)
 
 
-class SliderDeleteView(views.APIView):
-    permission_classes = (AllowAny,)
+class SliderDeleteView(SliderView):
 
     def delete(self, request, id):
         slider = Slider.objects.get(id=id)
