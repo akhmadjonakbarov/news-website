@@ -5,6 +5,12 @@
             "driver": "SQLite",
             "name": "News-Website",
             "database": "${workspaceFolder:news-website}/db.sqlite3"
+        },
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "Database",
+            "database": "${workspaceFolder:news-website}/db.sqlite3"
         }
     ]
 }

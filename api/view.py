@@ -18,9 +18,21 @@ class RoutesView(views.APIView):
             domain = l_domain
 
         routes = [
+            {'DASHBOARD':f'{domain}/dashboard/'},
             {'GET': f'{domain}api/'},
             {'GET': f'{domain}api/categories/'},
+            {'POST': f'{domain}api/categories/add/'},
+            {'PATCH': f'{domain}api/categories/update/id/'},
+            {'DELETE': f'{domain}api/categories/delete/id/'},
+            {'GET': f'{domain}api/sub-categories/'},
+            {'POST': f'{domain}api/sub-categories/add/'},
+            {'PATCH': f'{domain}api/sub-categories/update/id/'},
+            {'DELETE': f'{domain}api/sub-categories/delete/id/'},
             {'GET':f'{domain}api/news/'},
+            {'POST':f'{domain}api/news/add/'},
+            {'GET':f'{domain}api/news/detail/id/'},
+            {'PATCH':f'{domain}api/news/update/id/'},
+            {'DELETE':f'{domain}api/news/delete/id/'},
             {'POST': f'{domain}api/contact/'}
         ]
         return Response(routes)

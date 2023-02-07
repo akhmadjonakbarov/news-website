@@ -4,15 +4,15 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from api.serializers import SubCategorySerializer
-from postapp.models import SubCategory
+from newapp.models import SubCategory
 
 
 class SubCategoryListView(views.APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request):
-        categories = SubCategory.objects.all()
-        serializer = SubCategorySerializer(categories, many=True)
+        sub_categories = SubCategory.objects.all()
+        serializer = SubCategorySerializer(sub_categories, many=True)
         return Response(serializer.data)
 
 
@@ -33,18 +33,19 @@ class SubCategoryEditView(views.APIView):
 
     def patch(self, request, id):
         data = request.data
-        SubCategory = SubCategory.objects.get(id=id)
-        serializer = SubCategorySerializer(SubCategory, data=data, partial=True)
+        sub_category = SubCategory.objects.get(id=id)
+        serializer = SubCategorySerializer(sub_category, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.data)
+        return Response(serializer.errors)
 
 
 class SubCategoryDeleteView(views.APIView):
     permission_classes = (AllowAny,)
 
     def delete(self, request, id):
-        SubCategory = SubCategory.objects.get(id=id)
-        SubCategory.delete()
-        return Response()
+        id =self.request.query_params.get("id")
+        sub_category = SubCategory.objects.get(id=id)
+        sub_category.delete()
+        return Response({"message":"success"})

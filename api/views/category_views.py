@@ -4,7 +4,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from api.serializers import CategorySerializer
-from postapp.models import Category
+from newapp.models import Category
 
 
 class CategoryListView(views.APIView):
