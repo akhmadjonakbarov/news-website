@@ -2,7 +2,7 @@
 from rest_framework import generics
 from rest_framework.permissions import (AllowAny, IsAuthenticated)
 from rest_framework.response import Response
-from api.serializers import (NewSerializer, CommentSerializer,)
+from api.serializers import (NewSerializer, CommentSerializer, NewSerializerMobile)
 from newapp.models import (NewImages, New, Comment,)
 
 
@@ -12,7 +12,6 @@ class NewView(generics.GenericAPIView):
 
 
 class NewListView(NewView):
-    permission_classes = (AllowAny, )
 
     def get(self, request):
         news = New.objects.all()
@@ -70,3 +69,13 @@ class CommentAddView(generics.GenericAPIView):
             serializer.save()
             return Response({"data": serializer.data, "message": "comment was added"})
         return Response(serializer.errors)
+
+
+class NewMobileListView(generics.GenericAPIView):
+    serializer_class = NewSerializerMobile
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        news = New.objects.all()
+        serializer = self.get_serializer(news, many=True)
+        return Response(serializer.data)

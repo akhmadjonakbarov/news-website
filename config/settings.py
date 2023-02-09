@@ -1,7 +1,12 @@
+import os
+from .wsgi import application
 from os.path import join as joinpath
 from pathlib import Path
 from rest_framework.settings import api_settings
 from datetime import timedelta
+
+import djcelery
+djcelery.setup_loader()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -34,6 +39,7 @@ INSTALLED_APPS = [
     'knox',
     'ckeditor',
     'ckeditor_uploader',
+    'djcelery'
 ]
 
 MIDDLEWARE = [
@@ -216,6 +222,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 STATIC_URL = '/static/'
 STATIC_DIR = joinpath(BASE_DIR, 'static')
 
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
 
 CKEDITOR_UPLOAD_PATH = "ckeditor-uploads/"
 
@@ -224,6 +232,8 @@ if DEBUG:
     STATIC_ROOT = joinpath(BASE_DIR, 'staticfiles')
 else:
     STATIC_ROOT = joinpath(BASE_DIR, 'static')
+
+
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

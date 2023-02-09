@@ -85,3 +85,17 @@ class AccountSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password= serializers.CharField()
+
+
+class NewSerializerMobile(serializers.ModelSerializer):
+    images = serializers.SerializerMethodField(read_only=True)
+    class Meta:
+        model = New
+        fields = '__all__'
+    
+
+    def get_images(self, new:New):
+        images = new.get_images()
+        serializer = NewImagesSerializer(images, many=True)
+        return serializer.data
+    

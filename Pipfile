@@ -25,6 +25,11 @@ tomli = "==2.0.1"
 tzdata = "==2022.7"
 django-ckeditor = "*"
 django-rest-knox = "*"
+ez-setup = "*"
+setuptools = "<58.0.0"
+django-celery = "*"
+redis = "*"
+celery = "*"
 
 [dev-packages]
 autopep8 = "*"
